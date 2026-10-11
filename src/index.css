@@ -1,0 +1,96 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap");
+@import "tailwindcss";
+
+body {
+  font-family: "DM Sans", sans-serif;
+  min-width: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
+  min-width: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.cashier-mobile-lock,
+.cashier-orientation-lock {
+  display: none;
+}
+
+/* Match the Admin module's close control across Super Admin dialogs. */
+.superadmin-shell button[aria-label^="Close"]:has(> svg) {
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  flex-shrink: 0;
+  place-items: center;
+  border: 1px solid rgb(226 232 240);
+  border-radius: 9999px;
+  color: rgb(71 85 105);
+  background-color: transparent;
+  transition: border-color 150ms ease, color 150ms ease;
+}
+
+.superadmin-shell button[aria-label^="Close"]:has(> svg):hover {
+  border-color: rgb(11 107 81 / 0.4);
+  color: #0b6b51;
+}
+
+.superadmin-shell button[aria-label^="Close"]:has(> svg) > svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+@media (orientation: portrait) and (max-width: 1279px) {
+  .cashier-orientation-lock {
+    display: grid;
+  }
+
+  .cashier-workspace {
+    display: none;
+  }
+}
+
+@media (orientation: landscape) and (min-width: 900px) and (max-width: 1279px) {
+  .cashier-workspace-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 380px);
+  }
+
+  .cashier-workspace-grid > section,
+  .cashier-workspace-grid > aside {
+    height: calc(100dvh - 8rem);
+  }
+
+  .cashier-search-controls,
+  .cashier-shortcut-bar {
+    display: flex;
+  }
+
+  .cashier-search-controls {
+    flex-direction: row;
+  }
+
+  .cashier-shortcut-bar {
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cashier-cart-table {
+    display: block;
+  }
+}
+
+@media (max-width: 767px), (orientation: landscape) and (max-height: 520px) {
+  .cashier-mobile-lock {
+    display: grid;
+  }
+
+  .cashier-orientation-lock,
+  .cashier-workspace {
+    display: none;
+  }
+}

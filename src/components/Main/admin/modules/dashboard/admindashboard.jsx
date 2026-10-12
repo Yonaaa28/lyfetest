@@ -18,6 +18,7 @@ import {
   formatPeso,
   formatTransactionDate,
 } from "../sales_report/utils/salesReportUtils"
+import PromotionsSummary from "./PromotionsSummary"
 const summaryCards = [
   {
     id: "profit",
@@ -375,6 +376,8 @@ function AdminDashboard({
 
         <DonutChart items={purchasedItems} />
       </section>
+
+      <PromotionsSummary activeBranchId={activeBranchId} />
 
       <section className="grid gap-6 xl:grid-cols-[minmax(0,1.45fr)_minmax(280px,0.55fr)]">
         <DashboardPanel

@@ -15,54 +15,7 @@ import {
 
 const peso = "\u20b1"
 
-// TEMPORARY DASHBOARD SAMPLE DATA FOR UI TESTING
-// Set this to false when connecting the dashboard to production data.
-const USE_DASHBOARD_SAMPLE_DATA = true
-
-const sampleHomeData = {
-  summary: {
-    "Today's Total Sales": { value: `${peso}128,450.75`, trend: "8.4% vs yesterday", mobileDetail: "8.4% vs yesterday" },
-    "Total Branches": { value: "5", detail: "All branches active", mobileDetail: "All active" },
-    "Total Users": { value: "18", detail: "5 Branch Admins - 13 Cashiers", mobileDetail: "5 admins · 13 cashiers" },
-    "Pending Requests": { value: "6" },
-    "Low Stock Alerts": { value: "12" },
-    "Expiring Soon": { value: "8" },
-  },
-  branchSales: [
-    { name: "Camalig (Main Branch)", value: 45800.25, label: `${peso}45,800.25` },
-    { name: "Legazpi", value: 32400.5, label: `${peso}32,400.50` },
-    { name: "Daraga", value: 26750, label: `${peso}26,750.00` },
-    { name: "Guinobatan", value: 15900, label: `${peso}15,900.00` },
-    { name: "Polangui", value: 7600, label: `${peso}7,600.00` },
-  ],
-  branchPerformance: [
-    ["Camalig (Main Branch)", "Excellent", `${peso}385,420.50`, "Healthy", "up"],
-    ["Legazpi", "Good", `${peso}298,750.00`, "Low Stock", "up"],
-    ["Daraga", "Good", `${peso}241,890.75`, "Healthy", "up"],
-    ["Guinobatan", "Needs Attention", `${peso}186,340.00`, "Critical", "down"],
-    ["Polangui", "Average", `${peso}142,600.25`, "Healthy", "neutral"],
-  ],
-  medicines: [
-    ["1", "Biogesic 500mg Tablet", "Camalig (Main Branch)", "428", `${peso}4,922.00`, "+8.4%"],
-    ["2", "Neozep Forte", "Legazpi", "312", `${peso}3,744.00`, "+6.1%"],
-    ["3", "Bioflu Tablet", "Daraga", "276", `${peso}3,588.00`, "+4.8%"],
-    ["4", "Alaxan FR Capsule", "Guinobatan", "221", `${peso}2,983.50`, "-1.2%"],
-    ["5", "Solmux 500mg Capsule", "Polangui", "184", `${peso}3,128.00`, "+2.7%"],
-  ],
-  requests: [
-    ["PR-2026-0018", "Camalig (Main Branch)", "12", `${peso}48,750.00`, "2 days"],
-    ["PR-2026-0019", "Legazpi", "8", `${peso}31,420.50`, "3 days"],
-    ["PR-2026-0020", "Daraga", "15", `${peso}62,890.00`, "5 days"],
-    ["PR-2026-0021", "Guinobatan", "6", `${peso}19,675.25`, "1 day"],
-  ],
-  branchAttention: [
-    { branch: "Camalig (Main Branch)", detail: "5 medicines are below reorder level", status: "Low Stock", tone: "red", icon: HiOutlineBellAlert },
-    { branch: "Legazpi", detail: "3 medicines will expire within 30 days", status: "Expiring Soon", tone: "orange", icon: HiOutlineCalendarDays },
-    { branch: "Daraga", detail: "2 purchase requests are awaiting approval", status: "Pending Request", tone: "green", icon: HiOutlineShoppingCart },
-  ],
-}
-
-const liveHomeData = {
+const dashboardData = {
   branchSales: [],
   branchPerformance: [],
   medicines: [],
@@ -70,16 +23,13 @@ const liveHomeData = {
   branchAttention: [],
 }
 
-const activeHomeData = USE_DASHBOARD_SAMPLE_DATA ? sampleHomeData : liveHomeData
-
 const summaryCards = [
   {
     label: "Today's Total Sales",
     mobileLabel: "Today's Sales",
     value: `${peso}0.00`,
     detail: "All branches combined",
-    mobileDetail: "0% vs yesterday",
-    trend: "0% vs yesterday",
+    mobileDetail: "All branches combined",
     icon: HiOutlineArchiveBox,
     tone: "green",
     emphasized: true,
@@ -138,7 +88,7 @@ const mobileSummaryOrder = {
   "Total Branches": "order-5",
   "Total Users": "order-6",
 }
-const { branchSales, branchPerformance, medicines, requests, branchAttention } = activeHomeData
+const { branchSales, branchPerformance, medicines, requests, branchAttention } = dashboardData
 
 const toneClasses = {
   green: "bg-[#00675b] text-white",
@@ -187,11 +137,8 @@ function SuperAdminDashboard({ branchCount = 0, users = [], onNavigate = () => {
   const adminCount = users.filter((user) => user.role?.toLowerCase().includes("admin")).length
   const staffCount = Math.max(users.length - adminCount, 0)
   const dashboardCards = summaryCards.map((item) => {
-    if (USE_DASHBOARD_SAMPLE_DATA) {
-      return { ...item, ...sampleHomeData.summary[item.label] }
-    }
     if (item.label === "Total Branches") {
-      return { ...item, value: String(branchCount), detail: branchCount === 1 ? "All branch active" : "All branches active" }
+      return { ...item, value: String(branchCount), detail: "Active branches", mobileDetail: "Active branches" }
     }
     if (item.label === "Total Users") {
       return {
@@ -294,6 +241,7 @@ function SuperAdminDashboard({ branchCount = 0, users = [], onNavigate = () => {
             <h2 className="text-lg font-bold">Branch Performance</h2>
           </div>
           <div className="space-y-2 lg:hidden">
+            {branchPerformance.length === 0 ? <EmptyState message="No branch performance data yet." /> : null}
             {branchPerformance.map(([branch, status]) => <div key={branch} className="flex min-w-0 items-center justify-between gap-3 rounded-xl border border-slate-100 bg-slate-50/60 p-3"><span className="flex min-w-0 items-start gap-2 text-sm font-bold text-slate-900"><span className={`mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full ${status === "Needs Attention" ? "bg-red-500" : status === "Average" ? "bg-amber-400" : "bg-[#00675b]"}`} /><span className="line-clamp-2">{branch}</span></span><StatusPill value={status} /></div>)}
           </div>
           <div className="hidden min-h-0 flex-1 overflow-x-auto lg:block">

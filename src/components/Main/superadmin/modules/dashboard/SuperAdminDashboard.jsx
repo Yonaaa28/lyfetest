@@ -21,7 +21,7 @@ const USE_DASHBOARD_SAMPLE_DATA = true
 
 const sampleHomeData = {
   summary: {
-    "Today's Total Sales": { value: `${peso}128,450.75`, trend: "8.4% vs yesterday", mobileDetail: "8.4% vs yesterday" },
+    "Today's Total Sales": { value: `${peso}0.00`, trend: "8.4% vs yesterday", mobileDetail: "8.4% vs yesterday" },
     "Total Branches": { value: "5", detail: "All branches active", mobileDetail: "All active" },
     "Total Users": { value: "18", detail: "5 Branch Admins - 13 Cashiers", mobileDetail: "5 admins · 13 cashiers" },
     "Pending Requests": { value: "6" },
